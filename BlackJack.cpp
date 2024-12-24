@@ -3,45 +3,18 @@
 #include <iostream>
 #include <random>
 #include <vector>
-// #include "MLX42/include/MLX42/MLX42.h"
-    // Unicode symbols for card suits
-    char hearts[] = "\xE2\x99\xA5";
-    char diamonds[] = "\xE2\x99\xA6";
-    char clubs[] = "\xE2\x99\xA3";
-    char spades[] = "\xE2\x99\xA0";
 
-    // Unicode symbols for face cards
-    char jack[] = "\xE2\x99\xA9";  // Black chess knight symbol
-    char queen[] = "\xE2\x99\xA8"; // Black chess queen symbol
-    char king[] = "\xE2\x99\xA7";  // Black chess king symbol
-
-// mlx_t *mlx = mlx_init(550, 320, "BlackJack", 0);
-// mlx_image_t *img = mlx_new_image(mlx, 550, 320);
-
-// void    black_win()
-// {
-//     int i = -1;
-//     int j = -1;
-//     while (++i < 550)
-//     {
-//         j = -1;
-//         while (++j < 320)
-//             mlx_put_pixel(img, i, j, 255);
-//     }
-// }
-
-// void	loop(void *d)
-// {
-//     black_win();
-// 	mlx_image_to_window(mlx, img, 0, 0);
-// }
+char hearts[] = "\xE2\x99\xA5";
+char diamonds[] = "\xE2\x99\xA6";
+char clubs[] = "\xE2\x99\xA3";
+char spades[] = "\xE2\x99\xA0";
+char jack[] = "\xE2\x99\xA9";
+char queen[] = "\xE2\x99\xA8";
+char king[] = "\xE2\x99\xA7";
 
 std::string generateRandomSymbol() {
-    // Seed the random number generator (usually done once at the beginning of your program)
     static std::random_device rd;
     static std::mt19937 gen(rd());
-
-    // Create a vector to store card values
     static std::vector<std::string> cards;
 
     cards.push_back("♥");
@@ -49,18 +22,15 @@ std::string generateRandomSymbol() {
     cards.push_back("♣");
     cards.push_back("♠");
 
-    // Use a uniform distribution to select a random card from the vector
     static std::uniform_int_distribution<int> distribution(0, cards.size() - 1);
     int random_index = distribution(gen);
 
     return cards[random_index];
 }
+
 std::string generateRandomCard() {
-    // Seed the random number generator (usually done once at the beginning of your program)
     static std::random_device rd;
     static std::mt19937 gen(rd());
-
-    // Create a vector to store card values
     static std::vector<std::string> cards;
 
     cards.push_back("2");
@@ -77,18 +47,15 @@ std::string generateRandomCard() {
     cards.push_back("Q");
     cards.push_back("J");
 
-    // Use a uniform distribution to select a random card from the vector
     static std::uniform_int_distribution<int> distribution(0, cards.size() - 1);
     int random_index = distribution(gen);
 
     return cards[random_index];
 }
+
 std::string generateRandomCar() {
-    // Seed the random number generator (usually done once at the beginning of your program)
     static std::random_device rd;
     static std::mt19937 gen(rd());
-
-    // Create a vector to store card values
     static std::vector<std::string> cards;
 
     cards.push_back("2");
@@ -104,7 +71,6 @@ std::string generateRandomCar() {
     cards.push_back("Q");
     cards.push_back("J");
 
-    // Use a uniform distribution to select a random card from the vector
     static std::uniform_int_distribution<int> distribution(0, cards.size() - 1);
     int random_index = distribution(gen);
 
@@ -113,21 +79,19 @@ std::string generateRandomCar() {
 
 void    BlackJack()
 {
-
     static int chips = 2500;
     static int bet = 50;
     std::string ch;
-    if (!chips)
-    {
+
+    if (!chips) {
         std::cout << "\x1b[31mYou have no chips left.\x1b[0m\n\n";
         exit (0);
     }
-    if (chips < bet)
-    {
+    if (chips < bet) {
         std::cout << "\x1b[31mYou don't have enough chips to play with.\nTry adding chips or chnage your bet:\x1b[0m ";
         std::cin >> ch;
-        if (!ch.compare("bet"))
-        {
+
+        if (!ch.compare("bet")) {
             std::cout << "\nHow much would you like to bet: ";
             std::cin >> bet;
             if (bet > chips)
@@ -135,8 +99,7 @@ void    BlackJack()
             std::cout << "\n";
             return;
         }
-        else if (!ch.compare("add"))
-        {
+        else if (!ch.compare("add")) {
             int num;
             std::cout << "\nHow much would you like to add: ";
             std::cin >> num;
@@ -150,39 +113,23 @@ void    BlackJack()
     bool ACE = false;
     int num = 0;
     std::string choice;
-    // std::cin >> num;
     int Plcount = 0;
     int rand = 0;
-
     int Dlcount = 0;
     std::string Dsym;
+    std::chrono::milliseconds sleepDuration(70);
 
-
-    // Adjust the sleep duration to control the printing speed
-    std::chrono::milliseconds sleepDuration(70);  // 200 milliseconds (0.2 seconds)
-
-    for (char letter : "\x1b[1;32m\x1b[1mShuffling cards....\x1b[0m\x1b[0m") {
+    for (char letter : "\x1b[1;32m\x1b[DDealing cards....\x1b[0m\x1b[0m") {
         std::this_thread::sleep_for(sleepDuration);
         std::cout << letter << std::flush;
     }
-
-    // std::cout << "\nShuffling cards" << std::flush;
-
-    // std::cout << "." << std::flush;
-
-    // std::this_thread::sleep_for(std::chrono::seconds(1));
-    // std::cout << "." << std::flush;
-
-    // std::this_thread::sleep_for(std::chrono::seconds(1));
-    // std::cout << ".\x1b[0m\x1b[0m\n" << std::endl;
 
     std::cout << "\n\nbet: $" << bet << " chips left: " << chips - bet << "\n\x1b[34mYour cards    : \x1b[0m";
     chips -= bet;
     std::string randstring = generateRandomCard();
     if (std::isdigit(randstring[0]))
         Plcount += std::stoi(randstring);
-    else if (randstring[0] == 'A')
-    {
+    else if (randstring[0] == 'A') {
         Plcount += 11;
         ACE = true;
     }
@@ -193,16 +140,13 @@ void    BlackJack()
     randstring = generateRandomCard();
     if (std::isdigit(randstring[0]))
         Plcount += std::stoi(randstring);
-    else if (randstring[0] == 'A')
-    {
-        if (ACE)
-        {
+    else if (randstring[0] == 'A') {
+        if (ACE) {
             Plcount -= 10;
             Plcount += 1;
             ACE = false;
         }
-        else
-        {
+        else {
             Plcount += 11;
             ACE = true;
         }
@@ -210,13 +154,11 @@ void    BlackJack()
     else
         Plcount += 10;
     std::cout << randstring << generateRandomSymbol() << "\n";
-    if (Plcount == 21)
-    {
+    if (Plcount == 21) {
         std::cout << "\n\x1b[32m\x1b[1;34mBlackJack!\x1b[0m\x1b[0m\n\n";
         chips += bet * 2.5;
         return;
     }
-    // std::cout << Plcount << "\n";
 
     std::cout << "\x1b[33mDealer's cards: \x1b[0m";
     std::string Drandstring = generateRandomCar();
@@ -227,60 +169,61 @@ void    BlackJack()
     Dsym = generateRandomSymbol();
     std::cout << Drandstring << Dsym << " X?\n";
 
-    while (1)
-    {
+    while (1) {
         std::cout << "\nHit or Stand: ";
         std::cin >> choice;
-        if (!choice.compare("hit") || !choice.compare("h"))
-        {
+
+        if (std::cin.eof()) {
+            std::cout << "\nExiting the game.\n";
+            exit(0);
+        }
+        if (!choice.compare("hit") || !choice.compare("h")) {
             std::string randstring = generateRandomCard();
-            if (std::isdigit(randstring[0]))
-            {
+            if (std::isdigit(randstring[0])) {
                 Plcount += std::stoi(randstring);
-                if (ACE && Plcount > 21)
-                {
+                if (ACE && Plcount > 21) {
                     Plcount -= 10;
                     ACE = false;
                 }
             }
-            else if (randstring[0] == 'A')
-            {
+            else if (randstring[0] == 'A') {
                 Plcount += 11;
                 if (Plcount > 21)
                     Plcount -= 10;
                 else
                     ACE = true;
             }
-            else
-            {
+            else {
                 Plcount += 10;
-                if (ACE)
-                {
+                if (ACE) {
                     Plcount -= 10;
                     ACE = false;
                 }
             }
             std::cout << "\x1b[34m" << randstring << generateRandomSymbol() << " you have: \x1b[0m" << Plcount  << "\n";
-            if (Plcount == 21)
-            {
+            if (Plcount == 21) {
                 std::cout << "\n\x1b[32mYou win!\x1b[0m\n\n";
                 chips += bet * 2;
                 return;
             }
-            else if (Plcount > 21)
-            {
-                std::cout << "\n\x1b[31mYou lost!\x1b[0m\n\n";
+            else if (Plcount > 21) {
+                int random_num = std::rand() % 3;
+
+                if (random_num == 0)
+                    std::cout << "\n\x1b[31mbust!\x1b[0m\n\n";
+                else if (random_num == 1)
+                    std::cout << "\n\x1b[31mand a bust!\x1b[0m\n\n";
+                else
+                    std::cout << "\n\x1b[31mtoo many!\x1b[0m\n\n";
                 return;
             }
         }
-        else if (!choice.compare("stand") || !choice.compare("s"))
-        {
+        else if (!choice.compare("stand") || !choice.compare("s")) {
             std::cout << "\n\x1b[33mDealer's cards: \x1b[0m" << Drandstring << Dsym << " " << std::flush;
             Drandstring = generateRandomCar();
             if (std::isdigit(Drandstring[0]))
                 Dlcount += std::stoi(Drandstring);
-            else if (randstring[0] == 'A')
-            {
+            else if (randstring[0] == 'A') {
                 Dlcount += 10;
                 if (Dlcount > 21)
                     Dlcount -= 9;
@@ -290,13 +233,11 @@ void    BlackJack()
             std::this_thread::sleep_for(std::chrono::seconds(1));
             std::cout << Drandstring << generateRandomSymbol() << " " << std::flush;
             std::this_thread::sleep_for(std::chrono::seconds(1));
-            while (Dlcount < 17)
-            {
+            while (Dlcount < 17) {
                 Drandstring = generateRandomCar();
                 if (std::isdigit(Drandstring[0]))
                     Dlcount += std::stoi(Drandstring);
-                else if (Drandstring[0] == 'A')
-                {
+                else if (Drandstring[0] == 'A') {
                     Dlcount += 10;
                     if (Dlcount > 21)
                         Dlcount -= 9;
@@ -307,25 +248,21 @@ void    BlackJack()
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
             std::cout << "\nDealer has: " << Dlcount;
-            if (Dlcount > 21)
-            {
+            if (Dlcount > 21) {
                 std::cout << "\n\x1b[32mYou win!\x1b[0m\n\n";
                 chips += bet * 2;
                 return;
             }
-            else if (Dlcount > Plcount)
-            {
+            else if (Dlcount > Plcount) {
                 std::cout << "\n\x1b[31mYou lost!\x1b[0m\n\n";
                 return;
             }
-            else if (Dlcount == Plcount)
-            {
+            else if (Dlcount == Plcount) {
                 std::cout << "\n\x1b[33mPush!\x1b[0m\n\n";
                 chips += bet;
                 return;
             }
-            else
-            {
+            else {
                 std::cout << "\n\x1b[32mYou win!\x1b[0m\n\n";
                 chips += bet * 2;
                 return;
@@ -339,22 +276,19 @@ void    BlackJack()
             std::cout << "\nCommands:\nType \"hit\" to get another card.\nType \"stand\" to keep your current hand.\nType \"add\" to increse chips amount.\nType \"bet\" to chnage amount to play with.\nType \"count\" to see your card count.\nType \"help\" for commands.\nType \"clear\" to clean the window.\nType \"quit\" to exit the game." << std::endl;
         else if (!choice.compare("clear"))
             system("clear");
-        else if (!choice.compare("bet"))
-        {
+        else if (!choice.compare("bet")) {
             std::cout << "\nHow much would you like to bet: ";
             int tmp_bet = bet;
             chips += bet;
             std::cin >> bet;
-            if (bet > chips)
-            {
+            if (bet > chips) {
                 std::cout << "\nYou don't have enough chips to bet that much.\n";
                 bet = tmp_bet;
             }
             std::cout << "\n";
             return;
         }
-        else if (!choice.compare("add"))
-        {
+        else if (!choice.compare("add")) {
             std::cout << "\nHow much would you like to add: ";
             std::cin >> num;
             std::cout << "\n";
@@ -367,8 +301,7 @@ void    BlackJack()
     }
 }
 
-int main()
-{
+int main() {
     system("clear");
 
     std::cout << "\x1b[1;32m\x1b[1mWelcome to Text-Based Blackjack!\n\n";
